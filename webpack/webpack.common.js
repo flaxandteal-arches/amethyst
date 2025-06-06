@@ -256,6 +256,7 @@ module.exports = () => {
                 linkedApplicationPathCount += 1;
             }
         }
+        console.log(ARCHES_APPLICATIONS_PATHS);
 
         // END create universal constants
 
@@ -303,6 +304,7 @@ module.exports = () => {
             },
             resolve: {
                 modules: [Path.resolve(__dirname, PROJECT_RELATIVE_NODE_MODULES_PATH)],
+                fullySpecified: false,
                 alias: {
                     ...javascriptRelativeFilepathToAbsoluteFilepathLookup,
                     ...templateFilepathLookup,
@@ -311,6 +313,7 @@ module.exports = () => {
                     ...parsedPackageJSONFilepaths,
                     '@': [Path.resolve(__dirname, APP_ROOT, 'src'), ...archesApplicationsVuePaths, Path.resolve(__dirname, ROOT_DIR, 'app', 'src')],
                     'node_modules': Path.resolve(__dirname, PROJECT_RELATIVE_NODE_MODULES_PATH),
+                    'nanoid/non-secure': Path.resolve(__dirname, PROJECT_RELATIVE_NODE_MODULES_PATH, 'nanoid', 'non-secure', 'index.js'),
                     'arches/arches/app': Path.resolve(__dirname, ROOT_DIR, 'app'),  // ensure project-level imports of arches components point to local file
                     ...Object.fromEntries(ARCHES_APPLICATIONS.map(app => [  // ensure project-level imports of arches application components point to local file
                         Path.join(app, app), Path.resolve(__dirname, ARCHES_APPLICATIONS_PATHS[app])
@@ -338,6 +341,9 @@ module.exports = () => {
                         test: /\.mjs$/,
                         include: /node_modules/,
                         type: 'javascript/auto',
+                        resolve: {
+                            fullySpecified: false
+                        }
                     },
                     {
                         test: /\.js$/,
@@ -346,6 +352,9 @@ module.exports = () => {
                         options: {
                             presets: ['@babel/preset-env'],
                             cacheDirectory: Path.join(PROJECT_RELATIVE_NODE_MODULES_PATH, '.cache', 'babel-loader'),
+                        },
+                        resolve: {
+                            fullySpecified: false
                         }
                     },
                     {

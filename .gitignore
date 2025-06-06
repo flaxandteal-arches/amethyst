@@ -16,4 +16,4 @@ webpack-stats.json
 .DS_STORE
 CACHE
 .tsconfig-paths.json
-.frontend-configuration-settings.json
+*~

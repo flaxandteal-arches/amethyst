@@ -143,6 +143,9 @@ INSTALLED_APPS = (
     "django_celery_results",
     # "silk",
     "amethyst",  # Ensure the project is listed before any other arches applications
+    "arches_templating",
+    "arches_for_science",
+    "pgtrigger",
 )
 
 # Placing this last ensures any templates provided by Arches Applications
@@ -176,10 +179,44 @@ MIDDLEWARE.append(  # this must resolve last MIDDLEWARE entry
 
 STATICFILES_DIRS = build_staticfiles_dirs(app_root=APP_ROOT)
 
+FUNCTION_LOCATIONS.append("arches_for_science.functions")
+
 TEMPLATES = build_templates_config(
     debug=DEBUG,
     app_root=APP_ROOT,
+    context_processors=[
+        "django.contrib.auth.context_processors.auth",
+        "django.template.context_processors.debug",
+        "django.template.context_processors.i18n",
+        "django.template.context_processors.media",
+        "django.template.context_processors.static",
+        "django.template.context_processors.tz",
+        "django.template.context_processors.request",
+        "django.contrib.messages.context_processors.messages",
+        "arches.app.utils.context_processors.livereload",
+        "arches.app.utils.context_processors.map_info",
+        "arches.app.utils.context_processors.app_settings",
+        "arches_for_science.utils.context_processors.project_settings",
+    ],
 )
+
+RENDERERS += [
+    {
+        "name": "xy-reader",
+        "title": "XY Data File Reader",
+        "description": "Use for all instrument outputs with x-y data",
+        "id": "e93b7b27-40d8-4141-996e-e59ff08742f3",
+        "iconclass": "fa fa-bolt",
+        "component": "views/components/cards/file-renderers/xy-reader",
+        "ext": "txt",
+        "type": "text/plain",   
+        "exclude": "",
+    },
+]
+
+XY_TEXT_FILE_FORMATS = ["txt"]
+
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 ALLOWED_HOSTS = []
 
